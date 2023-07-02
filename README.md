@@ -10,12 +10,13 @@ It searches the [python package metadata](https://peps.python.org/pep-0345/) for
 
 ## requirements
 
-* Neovim (0.5+)
-* telescope.nvim
-* plenary.nvim (which is coming with telescope anyways)
-* a `python3` executable
+- Neovim (0.5+)
+- telescope.nvim
+- plenary.nvim (which is coming with telescope anyways)
+- a `python3` executable
 
-## installation 
+## installation
+
 ### `packer.nvim`
 
 ```lua
@@ -40,6 +41,32 @@ use({
   config = function()
     require("telescope").load_extension("python_docs")
   end,
+}
+```
+
+#### Example lazy.nvim setup with fzf-lua support
+
+```lua
+{
+  "syphar/python-docs.nvim",
+  dependencies = { "nvim-lua/plenary.nvim", "ibhagwan/fzf-lua" },
+  keys = {
+    {
+      "<leader>fp",
+      function()
+        return require("python-docs").fzf_lua()
+      end,
+      desc = "Search for installed python library docs.",
+    },
+    {
+      "<leader>fp",
+      function()
+        return require("python-docs").fzf_lua({ search = true })
+      end,
+      mode = "v",
+      desc = "Search for selection text in installed python library docs.",
+    },
+  },
 }
 ```
 
