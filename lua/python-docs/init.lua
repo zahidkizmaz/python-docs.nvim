@@ -22,7 +22,7 @@ local function get_python_packages()
 	return python_script_result
 end
 
-M.fzf_lua = function()
+M.fzf_lua = function(opts)
 	local has_fzf_lua, fzf_lua = pcall(require, "fzf-lua")
 	if not has_fzf_lua then
 		error("This plugin requires ibhagwan/fzf-lua")
@@ -45,8 +45,23 @@ M.fzf_lua = function()
 					end
 
 					local parts = vim.fn.split(value, ";")
-					local url = parts[3]
-					vim.fn["netrw#BrowseX"](url, 0)
+					local package_url = parts[3]
+
+					if opts.search then
+						-- duckduckgo search for the rest
+						local url = require("url")
+						local u = url.parse("http://duckduckgo.com/")
+						local vstart = vim.fn.getpos("'<")
+						local vend = vim.fn.getpos("'>")
+						local line_start = vstart[2]
+						local line_end = vend[2]
+						local visual_selection = vim.fn.getline(line_start, line_end)[1]
+
+						u.query.q = "\\" .. visual_selection .. " site:" .. package_url
+						vim.fn["netrw#BrowseX"](tostring(u), 0)
+					else
+						vim.fn["netrw#BrowseX"](package_url, 0)
+					end
 				end
 			end,
 		},
