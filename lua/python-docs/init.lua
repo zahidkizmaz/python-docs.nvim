@@ -46,17 +46,16 @@ M.fzf_lua = function(opts)
 
 					local parts = vim.fn.split(value, ";")
 					local package_url = parts[3]
-
 					if opts.search then
 						-- duckduckgo search for the rest
-						local url = require("url")
-						local u = url.parse("http://duckduckgo.com/")
 						local vstart = vim.fn.getpos("'<")
 						local vend = vim.fn.getpos("'>")
 						local line_start = vstart[2]
 						local line_end = vend[2]
 						local visual_selection = vim.fn.getline(line_start, line_end)[1]
 
+						local url = require("url")
+						local u = url.parse("http://duckduckgo.com/")
 						u.query.q = "\\" .. visual_selection .. " site:" .. package_url
 						vim.fn["netrw#BrowseX"](tostring(u), 0)
 					else
